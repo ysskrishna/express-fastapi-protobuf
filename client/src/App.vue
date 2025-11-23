@@ -122,7 +122,7 @@ export default {
       this.tagsError = null;
       try {
         const params = {
-          limit: this.tagSearch ? 0 : 10  // Top 10 by default, no limit when searching
+          limit: 10  // Always limit to top 10
         };
         if (this.tagSearch) {
           params.search = this.tagSearch;

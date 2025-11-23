@@ -103,10 +103,14 @@ app.get('/api/tags', async (req, res) => {
   try {
     const { search = '', limit = '10' } = req.query;
     
+    // Parse limit, default to 10 if invalid
+    const limitValue = parseInt(limit, 10);
+    const finalLimit = (limitValue > 0) ? limitValue : 10;
+    
     // Create TagsRequest protobuf message with search and limit
     const requestMessage = TagsRequest.create({
       search: search || '',
-      limit: parseInt(limit, 10) || 0
+      limit: finalLimit
     });
     
     // Serialize to binary

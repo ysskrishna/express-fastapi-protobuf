@@ -1,7 +1,6 @@
 import uvicorn
 from fastapi import FastAPI, Request, Response
 from fastapi.responses import Response as FastAPIResponse
-from datasets import load_dataset
 from typing import List, Dict
 import sys
 import os
@@ -27,23 +26,19 @@ quotes_data: List[Dict] = []
 
 @app.on_event("startup")
 async def load_quotes():
-    """Load quotes from local file, or download from Hugging Face if file doesn't exist"""
+    """Load quotes from local JSON file"""
     global quotes_data
     try:
-        # Try to load from local file first
-        if os.path.exists(DATASET_FILE):
-            print(f"Loading quotes from local file: {DATASET_FILE}")
-            with open(DATASET_FILE, 'r', encoding='utf-8') as f:
-                quotes_data = json.load(f)
-            print(f"✓ Loaded {len(quotes_data)} quotes from local file")
-        else:
-            # Fallback to Hugging Face if local file doesn't exist
-            print(f"Local dataset file not found: {DATASET_FILE}")
-            print("Downloading quotes from Hugging Face...")
-            print("(Run 'make download-dataset' to download and save locally)")
-            dataset = load_dataset("Abirate/english_quotes", split="train")
-            quotes_data = [item for item in dataset]
-            print(f"✓ Loaded {len(quotes_data)} quotes from Hugging Face")
+        if not os.path.exists(DATASET_FILE):
+            print(f"✗ Error: Dataset file not found: {DATASET_FILE}")
+            print("  Please ensure quotes.json exists in the fastapi directory")
+            quotes_data = []
+            return
+        
+        print(f"Loading quotes from local file: {DATASET_FILE}")
+        with open(DATASET_FILE, 'r', encoding='utf-8') as f:
+            quotes_data = json.load(f)
+        print(f"✓ Loaded {len(quotes_data)} quotes")
     except Exception as e:
         print(f"✗ Error loading dataset: {e}")
         quotes_data = []

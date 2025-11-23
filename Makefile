@@ -1,4 +1,4 @@
-.PHONY: setup proto download-dataset start stop clean help
+.PHONY: setup proto start stop clean help
 
 # Colors for output
 GREEN := \033[0;32m
@@ -8,12 +8,11 @@ NC := \033[0m # No Color
 help:
 	@echo "$(GREEN)Quote Recommender - Makefile Commands$(NC)"
 	@echo ""
-	@echo "  make setup            - Install all dependencies (uv sync, npm install)"
-	@echo "  make proto            - Generate protobuf code for Python"
-	@echo "  make download-dataset  - Download quotes dataset from Hugging Face and save locally"
-	@echo "  make start             - Start all 3 services (FastAPI, Node.js, Vue)"
-	@echo "  make stop              - Stop all services"
-	@echo "  make clean             - Clean generated files and node_modules"
+	@echo "  make setup    - Install all dependencies (uv sync, npm install)"
+	@echo "  make proto    - Generate protobuf code for Python"
+	@echo "  make start    - Start all 3 services (FastAPI, Node.js, Vue)"
+	@echo "  make stop     - Stop all services"
+	@echo "  make clean    - Clean generated files and node_modules"
 
 setup:
 	@echo "$(YELLOW)Setting up FastAPI...$(NC)"
@@ -21,7 +20,7 @@ setup:
 	@echo "$(YELLOW)Setting up Node.js...$(NC)"
 	@cd backend/nodejs && npm install
 	@echo "$(YELLOW)Setting up Vue frontend...$(NC)"
-	@cd client/vue-frontend && npm install
+	@cd client && npm install
 	@echo "$(GREEN)Setup complete!$(NC)"
 
 proto:
@@ -33,11 +32,6 @@ proto:
 	fi
 	@echo "$(GREEN)Protobuf code generated!$(NC)"
 
-download-dataset:
-	@echo "$(YELLOW)Downloading quotes dataset from Hugging Face...$(NC)"
-	@cd backend/fastapi && uv run python download_dataset.py
-	@echo "$(GREEN)Dataset downloaded!$(NC)"
-
 start:
 	@echo "$(YELLOW)Starting services...$(NC)"
 	@echo "$(GREEN)FastAPI: http://localhost:8000$(NC)"
@@ -48,7 +42,7 @@ start:
 	@trap 'kill 0' INT; \
 	cd backend/fastapi && uv run uvicorn main:app --reload --port 8000 & \
 	cd backend/nodejs && npm start & \
-	cd client/vue-frontend && npm run dev & \
+	cd client && npm run dev & \
 	wait
 
 stop:
@@ -61,8 +55,7 @@ stop:
 clean:
 	@echo "$(YELLOW)Cleaning generated files...$(NC)"
 	@rm -f backend/fastapi/quote_pb2.py backend/fastapi/quote_pb2.pyi
-	@rm -f backend/fastapi/quotes.json
 	@rm -rf backend/nodejs/node_modules
-	@rm -rf client/vue-frontend/node_modules
-	@rm -rf client/vue-frontend/dist
+	@rm -rf client/node_modules
+	@rm -rf client/dist
 	@echo "$(GREEN)Clean complete!$(NC)"

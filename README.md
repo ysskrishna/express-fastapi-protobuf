@@ -32,13 +32,7 @@ A Quote Recommender app demonstrating microservice communication between Vue.js,
    make proto
    ```
 
-3. **Download the quotes dataset (recommended):**
-   ```bash
-   make download-dataset
-   ```
-   This downloads the dataset from Hugging Face and saves it locally. The FastAPI service will load from the local file on startup (much faster). If you skip this step, the service will download from Hugging Face on first startup.
-
-4. **Start all services:**
+3. **Start all services:**
    ```bash
    make start
    ```
@@ -73,7 +67,7 @@ If you prefer to start services individually:
 
 4. **Start Vue frontend:**
    ```bash
-   cd client/vue-frontend
+   cd client
    npm install
    npm run dev
    ```
@@ -88,9 +82,7 @@ If you prefer to start services individually:
 
 ## Data Source
 
-Quotes are loaded from the [Hugging Face english_quotes dataset](https://huggingface.co/datasets/Abirate/english_quotes) (2,508 quotes from Goodreads).
-
-**Note:** The dataset is downloaded once using `make download-dataset` and stored locally as `backend/fastapi/quotes.json`. This makes startup much faster. If the local file doesn't exist, FastAPI will download from Hugging Face on startup as a fallback.
+Quotes are loaded from a local JSON file (`backend/fastapi/quotes.json`) containing 2,508 quotes from the [Hugging Face english_quotes dataset](https://huggingface.co/datasets/Abirate/english_quotes). The dataset file is included in the repository and loaded on FastAPI startup.
 
 ## API Endpoints
 
@@ -112,7 +104,7 @@ nodejs-fastapi-protobuf/
 │   ├── common/proto/quote.proto    # Protobuf schema
 │   ├── fastapi/                    # FastAPI service
 │   └── nodejs/                     # Node.js BFF
-├── client/vue-frontend/            # Vue.js frontend
+├── client/                         # Vue.js frontend
 ├── Makefile                        # Build commands
 └── README.md
 ```
@@ -121,10 +113,9 @@ nodejs-fastapi-protobuf/
 
 - `make setup` - Install all dependencies
 - `make proto` - Generate protobuf code
-- `make download-dataset` - Download quotes dataset from Hugging Face and save locally
 - `make start` - Start all services
 - `make stop` - Stop all services
-- `make clean` - Clean generated files and dependencies (including dataset)
+- `make clean` - Clean generated files and dependencies
 
 ## License
 
