@@ -11,10 +11,8 @@ venv/
 uv.lock
 
 # Generated protobuf files
-backend/fastapi/quote_pb2.py
-backend/fastapi/quote_pb2.pyi
-backend/fastapi/*_pb2.py
-backend/fastapi/*_pb2.pyi
+backend/fastapi/proto/
+
 
 # Build outputs
 dist/

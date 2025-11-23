@@ -11,9 +11,9 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
 
 # Import generated protobuf code
 try:
-    from quote_pb2 import QuoteRequest, QuoteResponse, Quote, TagsRequest, TagsResponse, TagInfo
+    from proto.quote_pb2 import QuoteRequest, QuoteResponse, Quote, TagsRequest, TagsResponse, TagInfo
 except ImportError:
-    print("Error: quote_pb2.py not found. Run 'make proto' first.")
+    print("Error: proto/quote_pb2.py not found. Run 'make proto' first.")
     sys.exit(1)
 
 app = FastAPI(title="Quote Recommender API")

@@ -21,15 +21,18 @@ setup:
 	@cd backend/nodejs && npm install
 	@echo "$(YELLOW)Setting up Vue frontend...$(NC)"
 	@cd client && npm install
+	@echo "$(YELLOW)Generating protobuf code...$(NC)"
+	@$(MAKE) proto
 	@echo "$(GREEN)Setup complete!$(NC)"
 
 proto:
 	@echo "$(YELLOW)Generating protobuf code for Python...$(NC)"
-	@protoc --python_out=backend/fastapi backend/common/proto/quote.proto
-	@if [ -f backend/fastapi/backend/common/proto/quote_pb2.py ]; then \
-		mv backend/fastapi/backend/common/proto/quote_pb2.py backend/fastapi/ && \
-		rm -rf backend/fastapi/backend; \
-	fi
+	@mkdir -p backend/fastapi/proto
+	@protoc \
+		--proto_path=backend/common/proto \
+		--python_out=backend/fastapi/proto \
+		backend/common/proto/*.proto
+	@touch backend/fastapi/proto/__init__.py
 	@echo "$(GREEN)Protobuf code generated!$(NC)"
 
 start:
@@ -54,7 +57,7 @@ stop:
 
 clean:
 	@echo "$(YELLOW)Cleaning generated files...$(NC)"
-	@rm -f backend/fastapi/quote_pb2.py backend/fastapi/quote_pb2.pyi
+	@rm -rf backend/fastapi/proto
 	@rm -rf backend/nodejs/node_modules
 	@rm -rf client/node_modules
 	@rm -rf client/dist
