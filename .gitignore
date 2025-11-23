@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+.venv/
+uv.lock
+
+# Generated protobuf files
+backend/fastapi/quote_pb2.py
+backend/fastapi/quote_pb2.pyi
+backend/fastapi/*_pb2.py
+backend/fastapi/*_pb2.pyi
+
+# Build outputs
+dist/
+build/
+*.egg-info/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Dataset files
+backend/fastapi/quotes.json

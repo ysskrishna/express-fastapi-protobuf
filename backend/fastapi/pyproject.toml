@@ -1,0 +1,12 @@
+[project]
+name = "quote-recommender-fastapi"
+version = "0.1.0"
+description = "FastAPI service for quote recommendations using protobuf"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.104.0",
+    "uvicorn[standard]>=0.24.0",
+    "protobuf>=4.25.0",
+    "datasets>=2.14.0",
+    "httpx>=0.25.0",
+]

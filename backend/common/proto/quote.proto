@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+// Request to get quotes by tag (with pagination)
+message QuoteRequest {
+  string tag = 1;
+  int32 page = 2;          // Page number (1-indexed)
+  int32 page_size = 3;     // Items per page
+}
+
+// A single quote
+message Quote {
+  int32 id = 1;
+  string text = 2;
+  string author = 3;
+  repeated string tags = 4;
+}
+
+// Response containing quotes (with pagination metadata)
+message QuoteResponse {
+  repeated Quote quotes = 1;
+  string tag = 2;
+  int32 total_count = 3;      // Total quotes matching the tag
+  int32 page = 4;             // Current page number
+  int32 page_size = 5;        // Items per page
+  int32 total_pages = 6;      // Total number of pages
+}
+
+// Request to get tags and their counts
+message TagsRequest {
+  string search = 1;        // Optional search query to filter tags
+  int32 limit = 2;         // Optional limit (default: 0 = no limit, use for top N)
+}
+
+// A single tag with its count
+message TagInfo {
+  string name = 1;
+  int32 count = 2;           // Number of quotes with this tag
+}
+
+// Response containing all tags with counts
+message TagsResponse {
+  repeated TagInfo tags = 1;
+  int32 total_tags = 2;      // Total number of unique tags
+}
