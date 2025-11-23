@@ -1,0 +1,25 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Virtual environments
+env/
+venv/
+.venv/
+
+# UV package manager
+uv.lock
+
+# Generated protobuf files
+proto/
+
+# Build outputs
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
