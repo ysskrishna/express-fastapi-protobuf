@@ -20,6 +20,7 @@
       <!-- Quotes Display (moved to QuoteGrid component) -->
       <QuoteGrid v-if="selectedTag" :selectedTag="selectedTag" :pageSize="pageSize" />
     </main>
+    <Footer />
   </div>
 </template>
 
@@ -27,12 +28,14 @@
 import TagSelector from './components/TagSelector.vue';
 import QuoteGrid from './components/QuoteGrid.vue';
 import { getTags } from './composables/api';
+import Footer from './components/Footer.vue';
 
 export default {
   name: 'App',
   components: {
     TagSelector,
-    QuoteGrid
+    QuoteGrid,
+    Footer
   },
   data() {
     return {
