@@ -1,4 +1,4 @@
-.PHONY: setup proto start stop clean help
+.PHONY: setup proto proto-lint proto-breaking start stop clean help
 
 # Colors for output
 GREEN := \033[0;32m
@@ -8,11 +8,13 @@ NC := \033[0m # No Color
 help:
 	@echo "$(GREEN)Quote Recommender - Makefile Commands$(NC)"
 	@echo ""
-	@echo "  make setup    - Install all dependencies (uv sync, npm install)"
-	@echo "  make proto    - Generate protobuf code for Python"
-	@echo "  make start    - Start all 3 services (FastAPI, Express, Vue)"
-	@echo "  make stop     - Stop all services"
-	@echo "  make clean    - Clean generated files and node_modules"
+	@echo "  make setup         - Install all dependencies (uv sync, npm install)"
+	@echo "  make proto         - Generate protobuf code for Python and JavaScript"
+	@echo "  make proto-lint    - Lint proto files with buf"
+	@echo "  make proto-breaking - Check for breaking changes against main branch"
+	@echo "  make start         - Start all 3 services (FastAPI, Express, Vue)"
+	@echo "  make stop          - Stop all services"
+	@echo "  make clean         - Clean generated files and node_modules"
 
 setup:
 	@echo "$(YELLOW)Setting up FastAPI...$(NC)"
@@ -26,14 +28,21 @@ setup:
 	@echo "$(GREEN)Setup complete!$(NC)"
 
 proto:
-	@echo "$(YELLOW)Generating protobuf code for Python...$(NC)"
-	@mkdir -p backend/fastapi/proto
-	@protoc \
-		--proto_path=backend/common/proto \
-		--python_out=backend/fastapi/proto \
-		backend/common/proto/*.proto
-	@touch backend/fastapi/proto/__init__.py
-	@echo "$(GREEN)Protobuf code generated!$(NC)"
+	@echo "$(YELLOW)Generating protobuf code...$(NC)"
+	@cd backend/common && buf generate
+	@touch backend/fastapi/src/generated/__init__.py
+	@touch backend/fastapi/src/generated/proto/__init__.py
+	@echo "$(GREEN)Protobuf code generated for Python and JavaScript!$(NC)"
+
+proto-lint:
+	@echo "$(YELLOW)Linting proto files...$(NC)"
+	@cd backend/common && buf lint
+	@echo "$(GREEN)Lint complete!$(NC)"
+
+proto-breaking:
+	@echo "$(YELLOW)Checking for breaking changes...$(NC)"
+	@cd backend/common && buf breaking --against '.git#branch=main'
+	@echo "$(GREEN)Breaking change check complete!$(NC)"
 
 start:
 	@echo "$(YELLOW)Starting services...$(NC)"
@@ -57,7 +66,8 @@ stop:
 
 clean:
 	@echo "$(YELLOW)Cleaning generated files...$(NC)"
-	@rm -rf backend/fastapi/proto
+	@rm -rf backend/fastapi/src/generated
+	@rm -rf backend/express/src/generated
 	@rm -rf backend/express/node_modules
 	@rm -rf client/node_modules
 	@rm -rf client/dist

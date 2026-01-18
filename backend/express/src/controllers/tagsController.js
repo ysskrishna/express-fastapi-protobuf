@@ -1,7 +1,7 @@
 import { query, validationResult } from 'express-validator';
 import express from 'express';
 
-export function createTagsRouter(protoTypes, service) {
+export function createTagsRouter(service) {
   const router = express.Router();
 
   router.get(
@@ -17,7 +17,7 @@ export function createTagsRouter(protoTypes, service) {
       }
       try {
         const { search = '', limit = '10' } = req.query;
-        const json = await service.fetchTags(protoTypes, { search, limit });
+        const json = await service.fetchTags({ search, limit });
         res.json(json);
       } catch (error) {
         console.error('Error fetching tags:', error);

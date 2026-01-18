@@ -14,7 +14,7 @@ venv/
 uv.lock
 
 # Generated protobuf files
-proto/
+src/generated/
 
 # Build outputs
 *.egg-info/

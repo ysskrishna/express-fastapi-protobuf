@@ -1,5 +1,4 @@
 import express from 'express';
-import { loadProto } from './lib/protoLoader.js';
 import * as service from './services/quotesService.js';
 import { createQuotesRouter } from './controllers/quotesController.js';
 import { createTagsRouter } from './controllers/tagsController.js';
@@ -16,20 +15,11 @@ app.use(cors({
 
 app.use(express.json());
 
-async function start() {
-  const protoTypes = await loadProto();
-  app.use(createQuotesRouter(protoTypes, service));
-  app.use(createTagsRouter(protoTypes, service));
+app.use(createQuotesRouter(service));
+app.use(createTagsRouter(service));
 
-  app.get('/health', (req, res) => res.json({ status: 'ok' }));
+app.get('/health', (req, res) => res.json({ status: 'ok' }));
 
-  app.listen(PORT, () => {
-    console.log(`Express BFF running on http://localhost:${PORT}`);
-  });
-}
-
-start().catch((err) => {
-  console.error('Failed to start express server:', err);
-  process.exit(1);
+app.listen(PORT, () => {
+  console.log(`Express BFF running on http://localhost:${PORT}`);
 });
-

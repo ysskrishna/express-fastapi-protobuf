@@ -1,6 +1,9 @@
 # Dependencies
 node_modules/
 
+# Generated protobuf files
+src/generated/
+
 # Logs
 *.log
 npm-debug.log*

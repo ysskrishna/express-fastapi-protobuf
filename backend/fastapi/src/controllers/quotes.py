@@ -1,14 +1,7 @@
 from fastapi import APIRouter, Request
 from fastapi.responses import Response as FastAPIResponse
-import sys
-import os
 
-# Ensure backend/fastapi is on path so `proto` package can be imported
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", ".."))
-try:
-    from proto.quote_pb2 import QuoteRequest, QuoteResponse, Quote
-except ImportError:
-    raise
+from ..generated.proto.quote_pb2 import QuoteRequest, QuoteResponse, Quote
 
 from ..repos.quotes_repo import get_all_quotes
 from ..services.quotes_service import filter_quotes_by_tag, paginate_items

@@ -1,7 +1,7 @@
 import { query, validationResult } from 'express-validator';
 import express from 'express';
 
-export function createQuotesRouter(protoTypes, service) {
+export function createQuotesRouter(service) {
   const router = express.Router();
 
   router.get(
@@ -18,7 +18,7 @@ export function createQuotesRouter(protoTypes, service) {
       }
       try {
         const { tag, page = '1', page_size = '10' } = req.query;
-        const json = await service.fetchQuotes(protoTypes, { tag, page, page_size });
+        const json = await service.fetchQuotes({ tag, page, page_size });
         res.json(json);
       } catch (error) {
         console.error('Error fetching quotes:', error);
