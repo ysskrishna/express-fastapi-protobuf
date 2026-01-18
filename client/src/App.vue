@@ -48,42 +48,17 @@
         <div v-else>
           <!-- Quote Cards -->
           <div class="quotes-grid">
-            <div v-for="quote in quotes" :key="quote.id" class="quote-card">
-              <p class="quote-text">"{{ quote.text }}"</p>
-              <p class="quote-author">— {{ quote.author }}</p>
-              <div class="quote-tags">
-                <span
-                  v-for="tag in quote.tags"
-                  :key="tag"
-                  class="quote-tag-badge"
-                >
-                  {{ tag }}
-                </span>
-              </div>
-            </div>
+            <QuoteCard v-for="quote in quotes" :key="quote.id || quote._id || quote.uid" :quote="quote" />
           </div>
 
           <!-- Pagination Controls -->
-          <div class="pagination">
-            <button
-              @click="goToPage(currentPage - 1)"
-              :disabled="currentPage === 1 || loadingQuotes"
-              class="pagination-button"
-            >
-              Previous
-            </button>
-            <span class="page-info">
-              Page {{ currentPage }} of {{ totalPages }}
-              <span class="total-count">({{ totalCount }} quotes)</span>
-            </span>
-            <button
-              @click="goToPage(currentPage + 1)"
-              :disabled="currentPage === totalPages || loadingQuotes"
-              class="pagination-button"
-            >
-              Next
-            </button>
-          </div>
+          <PaginationControls
+            :currentPage="currentPage"
+            :totalPages="totalPages"
+            :totalCount="totalCount"
+            :disabled="loadingQuotes"
+            @page-change="goToPage"
+          />
         </div>
       </section>
     </main>
@@ -92,11 +67,17 @@
 
 <script>
 import axios from 'axios';
+import QuoteCard from './components/QuoteCard.vue';
+import PaginationControls from './components/PaginationControls.vue';
 
 const API_BASE = 'http://localhost:3000/api';
 
 export default {
   name: 'App',
+  components: {
+    QuoteCard,
+    PaginationControls
+  },
   data() {
     return {
       tags: [],
@@ -128,7 +109,8 @@ export default {
           params.search = this.tagSearch;
         }
         const response = await axios.get(`${API_BASE}/tags`, { params });
-        this.tags = response.data.tags || [];
+        const data = response.data || {};
+        this.tags = data.tags || data.items || [];
       } catch (error) {
         this.tagsError = `Failed to load tags: ${error.message}`;
         console.error('Error loading tags:', error);
@@ -161,11 +143,13 @@ export default {
             page_size: this.pageSize
           }
         });
+        const data = response.data || {};
         
-        this.quotes = response.data.quotes || [];
-        this.totalCount = response.data.total_count || 0;
-        this.totalPages = response.data.total_pages || 1;
-        this.currentPage = response.data.page || 1;
+        // Support multiple possible backend shapes
+        this.quotes = data.quotes || data.items || data.results || [];
+        this.totalCount = data.total_count || data.total || data.totalCount || 0;
+        this.totalPages = data.total_pages || data.totalPages || Math.max(1, Math.ceil(this.totalCount / this.pageSize));
+        this.currentPage = data.page || data.current_page || data.page_number || this.currentPage;
       } catch (error) {
         this.quotesError = `Failed to load quotes: ${error.message}`;
         console.error('Error loading quotes:', error);
@@ -291,7 +275,7 @@ h2 {
 /* Quotes Section */
 .quotes-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: 1fr;
   gap: 20px;
   margin-bottom: 30px;
 }

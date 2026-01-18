@@ -4,6 +4,7 @@ import protobuf from 'protobufjs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import { query, validationResult } from 'express-validator';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -48,20 +49,28 @@ async function loadProto() {
 }
 
 // GET /api/quotes?tag=inspirational&page=1&page_size=10
-app.get('/api/quotes', async (req, res) => {
-  try {
-    const { tag, page = '1', page_size = '10' } = req.query;
-    
-    if (!tag) {
-      return res.status(400).json({ error: 'tag parameter is required' });
+app.get(
+  '/api/quotes',
+  [
+    query('tag').exists().withMessage('tag parameter is required').isString(),
+    query('page').optional().isInt({ min: 1 }).toInt(),
+    query('page_size').optional().isInt({ min: 1 }).toInt()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
     }
-    
-    // Create QuoteRequest protobuf message
-    const requestMessage = QuoteRequest.create({
-      tag: tag,
-      page: parseInt(page, 10),
-      page_size: parseInt(page_size, 10)
-    });
+
+    try {
+      const { tag, page = '1', page_size = '10' } = req.query;
+      
+      // Create QuoteRequest protobuf message
+      const requestMessage = QuoteRequest.create({
+        tag: String(tag),
+        page: parseInt(page, 10),
+        page_size: parseInt(page_size, 10)
+      });
     
     // Serialize to binary
     const buffer = QuoteRequest.encode(requestMessage).finish();
@@ -99,19 +108,30 @@ app.get('/api/quotes', async (req, res) => {
 });
 
 // GET /api/tags?search=insp&limit=10
-app.get('/api/tags', async (req, res) => {
-  try {
-    const { search = '', limit = '10' } = req.query;
-    
-    // Parse limit, default to 10 if invalid
-    const limitValue = parseInt(limit, 10);
-    const finalLimit = (limitValue > 0) ? limitValue : 10;
-    
-    // Create TagsRequest protobuf message with search and limit
-    const requestMessage = TagsRequest.create({
-      search: search || '',
-      limit: finalLimit
-    });
+app.get(
+  '/api/tags',
+  [
+    query('search').optional().isString(),
+    query('limit').optional().isInt({ min: 1 }).toInt()
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+
+    try {
+      const { search = '', limit = '10' } = req.query;
+      
+      // Parse limit, default to 10 if invalid
+      const limitValue = parseInt(limit, 10);
+      const finalLimit = (limitValue > 0) ? limitValue : 10;
+      
+      // Create TagsRequest protobuf message with search and limit
+      const requestMessage = TagsRequest.create({
+        search: search || '',
+        limit: finalLimit
+      });
     
     // Serialize to binary
     const buffer = TagsRequest.encode(requestMessage).finish();
