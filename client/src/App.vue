@@ -7,76 +7,32 @@
 
     <main>
       <!-- Tag Selector -->
-      <section class="tags-section">
-        <h2>Select a Tag</h2>
-        <div class="tag-search-container">
-          <input
-            v-model="tagSearch"
-            @input="onTagSearch"
-            type="text"
-            placeholder="Search tags... (showing top 10 by default)"
-            class="tag-search-input"
-          />
-        </div>
-        <div v-if="loadingTags" class="loading">Loading tags...</div>
-        <div v-else-if="tagsError" class="error">{{ tagsError }}</div>
-        <div v-else-if="tags.length === 0" class="no-tags">
-          No tags found matching your search.
-        </div>
-        <div v-else class="tags-container">
-          <button
-            v-for="tag in tags"
-            :key="tag.name"
-            @click="selectTag(tag.name)"
-            :class="['tag-button', { active: selectedTag === tag.name }]"
-          >
-            {{ tag.name }}
-            <span class="tag-count">({{ tag.count }})</span>
-          </button>
-        </div>
-      </section>
+      <TagSelector
+        v-model="tagSearch"
+        :tags="tags"
+        :loading="loadingTags"
+        :error="tagsError"
+        :selected="selectedTag"
+        @search="onTagSearch"
+        @select="selectTag"
+      />
 
-      <!-- Quotes Display -->
-      <section v-if="selectedTag" class="quotes-section">
-        <h2>Quotes: {{ selectedTag }}</h2>
-        
-        <div v-if="loadingQuotes" class="loading">Loading quotes...</div>
-        <div v-else-if="quotesError" class="error">{{ quotesError }}</div>
-        <div v-else-if="quotes.length === 0" class="no-quotes">
-          No quotes found for this tag.
-        </div>
-        <div v-else>
-          <!-- Quote Cards -->
-          <div class="quotes-grid">
-            <QuoteCard v-for="quote in quotes" :key="quote.id || quote._id || quote.uid" :quote="quote" />
-          </div>
-
-          <!-- Pagination Controls -->
-          <PaginationControls
-            :currentPage="currentPage"
-            :totalPages="totalPages"
-            :totalCount="totalCount"
-            :disabled="loadingQuotes"
-            @page-change="goToPage"
-          />
-        </div>
-      </section>
+      <!-- Quotes Display (moved to QuoteGrid component) -->
+      <QuoteGrid v-if="selectedTag" :selectedTag="selectedTag" :pageSize="pageSize" />
     </main>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
-import QuoteCard from './components/QuoteCard.vue';
-import PaginationControls from './components/PaginationControls.vue';
-
-const API_BASE = 'http://localhost:3000/api';
+import TagSelector from './components/TagSelector.vue';
+import QuoteGrid from './components/QuoteGrid.vue';
+import { getTags } from './composables/api';
 
 export default {
   name: 'App',
   components: {
-    QuoteCard,
-    PaginationControls
+    TagSelector,
+    QuoteGrid
   },
   data() {
     return {
@@ -85,10 +41,6 @@ export default {
       tagsError: null,
       tagSearch: '',
       selectedTag: null,
-      quotes: [],
-      loadingQuotes: false,
-      quotesError: null,
-      currentPage: 1,
       pageSize: 10,
       totalCount: 0,
       totalPages: 0
@@ -102,24 +54,18 @@ export default {
       this.loadingTags = true;
       this.tagsError = null;
       try {
-        const params = {
-          limit: 10  // Always limit to top 10
-        };
-        if (this.tagSearch) {
-          params.search = this.tagSearch;
-        }
-        const response = await axios.get(`${API_BASE}/tags`, { params });
-        const data = response.data || {};
+        const params = { limit: 10 };
+        if (this.tagSearch) params.search = this.tagSearch;
+        const data = await getTags(params);
         this.tags = data.tags || data.items || [];
       } catch (error) {
-        this.tagsError = `Failed to load tags: ${error.message}`;
+        this.tagsError = `Failed to load tags: ${error.message || error}`;
         console.error('Error loading tags:', error);
       } finally {
         this.loadingTags = false;
       }
     },
     onTagSearch() {
-      // Debounce search - reload tags after user stops typing
       clearTimeout(this.searchTimeout);
       this.searchTimeout = setTimeout(() => {
         this.loadTags();
@@ -127,41 +73,6 @@ export default {
     },
     selectTag(tagName) {
       this.selectedTag = tagName;
-      this.currentPage = 1;
-      this.loadQuotes();
-    },
-    async loadQuotes() {
-      if (!this.selectedTag) return;
-      
-      this.loadingQuotes = true;
-      this.quotesError = null;
-      try {
-        const response = await axios.get(`${API_BASE}/quotes`, {
-          params: {
-            tag: this.selectedTag,
-            page: this.currentPage,
-            page_size: this.pageSize
-          }
-        });
-        const data = response.data || {};
-        
-        // Support multiple possible backend shapes
-        this.quotes = data.quotes || data.items || data.results || [];
-        this.totalCount = data.total_count || data.total || data.totalCount || 0;
-        this.totalPages = data.total_pages || data.totalPages || Math.max(1, Math.ceil(this.totalCount / this.pageSize));
-        this.currentPage = data.page || data.current_page || data.page_number || this.currentPage;
-      } catch (error) {
-        this.quotesError = `Failed to load quotes: ${error.message}`;
-        console.error('Error loading quotes:', error);
-      } finally {
-        this.loadingQuotes = false;
-      }
-    },
-    goToPage(page) {
-      if (page >= 1 && page <= this.totalPages) {
-        this.currentPage = page;
-        this.loadQuotes();
-      }
     }
   }
 };
@@ -272,120 +183,7 @@ h2 {
   opacity: 0.8;
 }
 
-/* Quotes Section */
-.quotes-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 20px;
-  margin-bottom: 30px;
-}
-
-.quote-card {
-  background: #f8f9fa;
-  border-left: 4px solid #667eea;
-  padding: 20px;
-  border-radius: 8px;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.quote-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
-
-.quote-text {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  color: #333;
-  margin-bottom: 15px;
-  font-style: italic;
-}
-
-.quote-author {
-  font-weight: bold;
-  color: #667eea;
-  margin-bottom: 10px;
-}
-
-.quote-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-top: 10px;
-}
-
-.quote-tag-badge {
-  background: #e9ecef;
-  color: #495057;
-  padding: 4px 10px;
-  border-radius: 12px;
-  font-size: 0.85rem;
-}
-
-/* Pagination */
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 30px;
-}
-
-.pagination-button {
-  padding: 10px 20px;
-  border: 2px solid #667eea;
-  background: white;
-  color: #667eea;
-  border-radius: 8px;
-  cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s ease;
-}
-
-.pagination-button:hover:not(:disabled) {
-  background: #667eea;
-  color: white;
-}
-
-.pagination-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-
-.page-info {
-  font-size: 1.1rem;
-  color: #333;
-}
-
-.total-count {
-  color: #666;
-  font-size: 0.9rem;
-  margin-left: 5px;
-}
-
-/* Loading and Error States */
-.loading {
-  text-align: center;
-  padding: 20px;
-  color: #667eea;
-  font-size: 1.1rem;
-}
-
-.error {
-  text-align: center;
-  padding: 20px;
-  background: #fee;
-  color: #c33;
-  border-radius: 8px;
-  border: 1px solid #fcc;
-}
-
-.no-quotes {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-  font-size: 1.1rem;
-}
+/* Quotes Section styles moved to `QuoteGrid.vue` and `QuoteCard.vue` */
 
 .no-tags {
   text-align: center;
