@@ -79,6 +79,16 @@ export default {
 </script>
 
 <style>
+:root {
+  --bg-1: #f6f8fb;
+  --bg-2: #eef3f8;
+  --surface: #ffffff;
+  --primary: #0f172a; /* near-black for headings */
+  --accent: #0ea5a4;  /* teal accent */
+  --muted: #6b7280;
+  --shadow: rgba(15, 23, 42, 0.06);
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -87,66 +97,72 @@ export default {
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: radial-gradient(circle at 10% 10%, var(--bg-2), var(--bg-1));
   min-height: 100vh;
-  padding: 20px;
+  padding: 28px;
+  color: var(--primary);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
 header {
   text-align: center;
-  color: white;
-  margin-bottom: 40px;
+  color: var(--primary);
+  margin-bottom: 32px;
 }
 
 header h1 {
-  font-size: 2.5rem;
-  margin-bottom: 10px;
+  font-size: 2.1rem;
+  margin-bottom: 6px;
+  letter-spacing: -0.5px;
 }
 
 .subtitle {
-  font-size: 1.2rem;
-  opacity: 0.9;
+  font-size: 1rem;
+  color: var(--muted);
 }
 
 main {
-  background: white;
-  border-radius: 12px;
-  padding: 30px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+  background: var(--surface);
+  border-radius: 14px;
+  padding: 28px;
+  box-shadow: 0 12px 36px var(--shadow);
 }
 
 section {
-  margin-bottom: 40px;
+  margin-bottom: 32px;
 }
 
 h2 {
-  color: #333;
-  margin-bottom: 20px;
-  font-size: 1.5rem;
+  color: var(--primary);
+  margin-bottom: 18px;
+  font-size: 1.25rem;
 }
 
 /* Tags Section */
 .tag-search-container {
-  margin-bottom: 20px;
+  margin-bottom: 18px;
 }
 
 .tag-search-input {
   width: 100%;
   padding: 12px 16px;
-  border: 2px solid #e0e0e0;
-  border-radius: 8px;
+  border: 1px solid #e6e9ef;
+  border-radius: 10px;
   font-size: 1rem;
-  transition: border-color 0.3s ease;
+  transition: box-shadow 0.18s ease, border-color 0.18s ease;
+  background: linear-gradient(180deg, #fff, #fbfdff);
 }
 
 .tag-search-input:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--accent);
+  box-shadow: 0 4px 14px rgba(14,165,164,0.08);
 }
 
 .tags-container {
@@ -156,31 +172,32 @@ h2 {
 }
 
 .tag-button {
-  padding: 10px 20px;
-  border: 2px solid #667eea;
-  background: white;
-  color: #667eea;
-  border-radius: 25px;
+  padding: 8px 18px;
+  border: 1px solid rgba(14,165,164,0.18);
+  background: rgba(14,165,164,0.04);
+  color: var(--primary);
+  border-radius: 20px;
   cursor: pointer;
-  font-size: 1rem;
-  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease;
 }
 
 .tag-button:hover {
-  background: #667eea;
+  background: var(--accent);
   color: white;
   transform: translateY(-2px);
 }
 
 .tag-button.active {
-  background: #667eea;
+  background: var(--accent);
   color: white;
-  font-weight: bold;
+  font-weight: 600;
+  border-color: transparent;
 }
 
 .tag-count {
-  margin-left: 5px;
-  opacity: 0.8;
+  margin-left: 6px;
+  opacity: 0.85;
 }
 
 /* Quotes Section styles moved to `QuoteGrid.vue` and `QuoteCard.vue` */
@@ -188,7 +205,7 @@ h2 {
 .no-tags {
   text-align: center;
   padding: 20px;
-  color: #666;
+  color: var(--muted);
   font-size: 1rem;
 }
 </style>
