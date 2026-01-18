@@ -99,7 +99,7 @@ Quotes are loaded from a local JSON file (`backend/fastapi/quotes.json`) contain
 ## Project Structure
 
 ```
-nodejs-fastapi-protobuf/
+express-fastapi-protobuf/
 ├── backend/
 │   ├── common/proto/quote.proto    # Protobuf schema
 │   ├── fastapi/                    # FastAPI service

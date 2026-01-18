@@ -34,7 +34,7 @@ dependencies = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/ysskrishna/nodejs-fastapi-protobuf#readme"
-Repository = "https://github.com/ysskrishna/nodejs-fastapi-protobuf"
-Issues = "https://github.com/ysskrishna/nodejs-fastapi-protobuf/issues"
-Changelog = "https://github.com/ysskrishna/nodejs-fastapi-protobuf/blob/main/CHANGELOG.md"
+Homepage = "https://github.com/ysskrishna/express-fastapi-protobuf#readme"
+Repository = "https://github.com/ysskrishna/express-fastapi-protobuf"
+Issues = "https://github.com/ysskrishna/express-fastapi-protobuf/issues"
+Changelog = "https://github.com/ysskrishna/express-fastapi-protobuf/blob/main/CHANGELOG.md"
