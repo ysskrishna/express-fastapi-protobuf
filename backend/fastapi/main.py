@@ -5,6 +5,7 @@ from typing import List, Dict
 import sys
 import os
 import json
+from contextlib import asynccontextmanager
 
 # Add proto directory to path
 sys.path.insert(0, os.path.join(os.path.dirname(__file__)))
@@ -16,7 +17,6 @@ except ImportError:
     print("Error: proto/quote_pb2.py not found. Run 'make proto' first.")
     sys.exit(1)
 
-app = FastAPI(title="Quote Recommender API")
 
 # Path to local dataset file
 DATASET_FILE = os.path.join(os.path.dirname(__file__), "quotes.json")
@@ -24,7 +24,6 @@ DATASET_FILE = os.path.join(os.path.dirname(__file__), "quotes.json")
 # Load quotes dataset on startup
 quotes_data: List[Dict] = []
 
-@app.on_event("startup")
 async def load_quotes():
     """Load quotes from local JSON file"""
     global quotes_data
@@ -34,7 +33,6 @@ async def load_quotes():
             print("  Please ensure quotes.json exists in the fastapi directory")
             quotes_data = []
             return
-        
         print(f"Loading quotes from local file: {DATASET_FILE}")
         with open(DATASET_FILE, 'r', encoding='utf-8') as f:
             quotes_data = json.load(f)
@@ -42,6 +40,17 @@ async def load_quotes():
     except Exception as e:
         print(f"✗ Error loading dataset: {e}")
         quotes_data = []
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Startup: load quotes
+    await load_quotes()
+    yield
+    # Shutdown: add cleanup here if needed
+
+
+app = FastAPI(title="Quote Recommender API", lifespan=lifespan)
 
 @app.post("/quotes")
 async def get_quotes(request: Request) -> Response:
