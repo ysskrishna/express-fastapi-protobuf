@@ -1,16 +1,27 @@
 import uvicorn
-import sys
-import os
+from fastapi import FastAPI
+from contextlib import asynccontextmanager
+
 from src.config import settings
+from src.controllers import quotes as quotes_controller
+from src.controllers import tags as tags_controller
+from src.repos.quotes_repo import load_quotes
 
-# ensure backend/fastapi is on path so imports from src work
-sys.path.insert(0, os.path.dirname(__file__))
+app = FastAPI(title="Quote Recommender API")
 
-try:
-    from src.main import app  # type: ignore
-except Exception as e:
-    print("Error importing refactored app:", e)
-    raise
+
+@asynccontextmanager
+async def lifespan(app_instance: FastAPI):
+    # Load dataset on startup
+    await load_quotes()
+    yield
+
+
+app.router.lifespan_context = lifespan
+
+# include routers
+app.include_router(quotes_controller.router)
+app.include_router(tags_controller.router)
 
 if __name__ == "__main__":
     uvicorn.run(app, host=settings.FASTAPI_HOST, port=settings.FASTAPI_PORT)

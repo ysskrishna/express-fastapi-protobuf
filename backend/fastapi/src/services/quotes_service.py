@@ -1,7 +1,11 @@
 from typing import List, Dict, Tuple
 
 def filter_quotes_by_tag(all_quotes: List[Dict], tag: str) -> List[Dict]:
-    """Return list of quote dicts that contain the tag (case-insensitive)."""
+    """Return list of quote dicts that contain the tag (case-insensitive).
+
+    Note: O(n) scan is intentional for simplicity. For large datasets,
+    consider building a tag index on startup for O(1) lookups.
+    """
     if not tag:
         return []
     matching = []
@@ -25,6 +29,11 @@ def paginate_items(items: List[Dict], page: int, page_size: int) -> Tuple[List[D
     return items[start_idx:end_idx], total_count, total_pages
 
 def compute_tag_counts(all_quotes: List[Dict]) -> Dict[str, int]:
+    """Compute tag frequency counts from all quotes.
+
+    Note: Recomputed per-request for simplicity. For large datasets,
+    consider caching this on startup.
+    """
     counts = {}
     for quote_item in all_quotes:
         for tag in quote_item.get("tags", []):
