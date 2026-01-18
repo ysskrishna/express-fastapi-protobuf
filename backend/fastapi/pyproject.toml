@@ -8,4 +8,5 @@ dependencies = [
     "uvicorn[standard]>=0.24.0",
     "protobuf>=4.25.0",
     "httpx>=0.25.0",
+    "pydantic-settings>=2.12.0",
 ]

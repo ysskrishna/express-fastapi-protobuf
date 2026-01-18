@@ -1,13 +1,13 @@
-# Quote Recommender - Node.js + FastAPI + Protobuf
+# Quote Recommender - Express + FastAPI + Protobuf
 
-A Quote Recommender app demonstrating microservice communication between Vue.js, Node.js, and FastAPI using Protocol Buffers.
+A Quote Recommender app demonstrating microservice communication between Vue.js, Express, and FastAPI using Protocol Buffers.
 
 ## Architecture
 
 ```
 ┌──────────────┐     JSON/HTTP      ┌──────────────┐     Protobuf      ┌──────────────┐
 │              │  ───────────────►  │              │  ───────────────► │              │
-│   Vue.js     │  GET /quotes?tag=  │   Node.js    │  Binary payload   │   FastAPI    │
+│   Vue.js     │  GET /quotes?tag=  │   Express    │  Binary payload   │   FastAPI    │
 │   Frontend   │  ◄───────────────  │   (BFF)      │  ◄─────────────── │  (Quotes DB) │
 │  (Port 5173) │     JSON array     │ (Port 3000)  │  Binary response  │ (Port 8000)  │
 └──────────────┘                    └──────────────┘                   └──────────────┘
@@ -38,9 +38,9 @@ A Quote Recommender app demonstrating microservice communication between Vue.js,
    ```
 
 4. **Open the app:**
-   - Frontend: http://localhost:5173
-   - Node.js BFF: http://localhost:3000
-   - FastAPI: http://localhost:8000
+  - Frontend: http://localhost:5173
+  - Express BFF: http://localhost:3000
+  - FastAPI: http://localhost:8000
 
 ### Manual Start (Alternative)
 
@@ -58,9 +58,9 @@ If you prefer to start services individually:
    uv run uvicorn main:app --reload --port 8000
    ```
 
-3. **Start Node.js BFF:**
+3. **Start Express BFF:**
    ```bash
-   cd backend/nodejs
+   cd backend/express
    npm install
    npm start
    ```
@@ -77,7 +77,7 @@ If you prefer to start services individually:
 - **Tag-based quote filtering** - Browse quotes by tags (inspirational, life, love, etc.)
 - **Pagination** - Navigate through quotes with page controls
 - **Tag statistics** - See count of quotes per tag
-- **Protobuf communication** - Efficient binary protocol between Node.js and FastAPI
+- **Protobuf communication** - Efficient binary protocol between Express and FastAPI
 - **Modern UI** - Clean, responsive Vue.js interface
 
 ## Data Source
@@ -86,7 +86,7 @@ Quotes are loaded from a local JSON file (`backend/fastapi/quotes.json`) contain
 
 ## API Endpoints
 
-### Node.js BFF (JSON)
+### Express BFF (JSON)
 - `GET /api/quotes?tag={tag}&page={page}&page_size={size}` - Get quotes by tag
 - `GET /api/tags` - Get all tags with counts
 - `GET /health` - Health check
@@ -103,7 +103,7 @@ nodejs-fastapi-protobuf/
 ├── backend/
 │   ├── common/proto/quote.proto    # Protobuf schema
 │   ├── fastapi/                    # FastAPI service
-│   └── nodejs/                     # Node.js BFF
+│   └── express/                    # Express BFF
 ├── client/                         # Vue.js frontend
 ├── Makefile                        # Build commands
 └── README.md
