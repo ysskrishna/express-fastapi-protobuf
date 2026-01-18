@@ -37,13 +37,13 @@ proto:
 
 start:
 	@echo "$(YELLOW)Starting services...$(NC)"
-	@echo "$(GREEN)FastAPI: http://localhost:8000$(NC)"
-	@echo "$(GREEN)Node.js BFF: http://localhost:3000$(NC)"
-	@echo "$(GREEN)Vue Frontend: http://localhost:5173$(NC)"
+	@echo "$(GREEN)FastAPI: see backend/fastapi/src/config.py or .env for port$(NC)"
+	@echo "$(GREEN)Node.js BFF: see backend/express/src/config.js for port$(NC)"
+	@echo "$(GREEN)Vue Frontend: see client/src/config.js for port$(NC)"
 	@echo ""
 	@echo "$(YELLOW)Press Ctrl+C to stop all services$(NC)"
 	@trap 'kill 0' INT; \
-	cd backend/fastapi && uv run uvicorn main:app --reload --port 8000 & \
+	cd backend/fastapi && uv run uvicorn main:app --reload & \
 	cd backend/express && npm start & \
 	cd client && npm run dev & \
 	wait

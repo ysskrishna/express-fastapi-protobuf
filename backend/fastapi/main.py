@@ -1,7 +1,7 @@
-"""Compatibility entrypoint — import the refactored FastAPI app from src."""
 import uvicorn
 import sys
 import os
+from src.config import settings
 
 # ensure backend/fastapi is on path so imports from src work
 sys.path.insert(0, os.path.dirname(__file__))
@@ -13,4 +13,4 @@ except Exception as e:
     raise
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8000)
+    uvicorn.run(app, host=settings.FASTAPI_HOST, port=settings.FASTAPI_PORT)

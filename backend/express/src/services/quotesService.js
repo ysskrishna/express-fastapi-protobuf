@@ -1,6 +1,5 @@
 import axios from 'axios';
-
-const FASTAPI_URL = 'http://localhost:8000';
+import { FASTAPI_URL } from '../config.js';
 
 export async function fetchQuotes({ QuoteRequest, QuoteResponse }, params) {
   const { tag, page = 1, page_size = 10 } = params;

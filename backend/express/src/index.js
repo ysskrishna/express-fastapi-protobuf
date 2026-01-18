@@ -4,13 +4,12 @@ import * as service from './services/quotesService.js';
 import { createQuotesRouter } from './controllers/quotesController.js';
 import { createTagsRouter } from './controllers/tagsController.js';
 import cors from 'cors';
+import { CORS_ORIGIN, PORT } from './config.js';
 
 const app = express();
-const PORT = 3000;
-
 // Enable CORS for frontend
 app.use(cors({
-  origin: 'http://localhost:5173',
+  origin: CORS_ORIGIN,
   methods: ['GET', 'POST', 'OPTIONS'],
   allowedHeaders: ['Content-Type'],
 }));
