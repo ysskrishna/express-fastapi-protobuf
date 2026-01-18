@@ -1,12 +1,50 @@
 [project]
 name = "quote-recommender-fastapi"
 version = "0.1.0"
-description = "FastAPI service for quote recommendations using protobuf"
+description = "FastAPI service for quote recommendations using Protocol Buffers"
+readme = "README.md"
 requires-python = ">=3.10"
-dependencies = [
-    "fastapi>=0.104.0",
-    "uvicorn[standard]>=0.24.0",
-    "protobuf>=4.25.0",
-    "httpx>=0.25.0",
-    "pydantic-settings>=2.12.0",
+authors = [
+  { name = "Y. Siva Sai Krishna", email = "sivasaikrishnassk@gmail.com" }
 ]
+license = { text = "MIT" }
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.11",
+  "License :: OSI Approved :: MIT License",
+  "Operating System :: OS Independent",
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Topic :: Software Development :: APIs"
+]
+keywords = [
+  "fastapi",
+  "protobuf",
+  "quotes",
+  "recommender",
+  "api"
+]
+dependencies = [
+  "fastapi>=0.104.0",
+  "uvicorn[standard]>=0.24.0",
+  "protobuf>=4.25.0",
+  "httpx>=0.25.0",
+  "pydantic-settings>=2.12.0"
+]
+
+[dependency-groups]
+dev = [
+  "pytest>=8.3.5",
+  "black",
+]
+
+[project.urls]
+Homepage = "https://github.com/ysskrishna/nodejs-fastapi-protobuf#readme"
+Repository = "https://github.com/ysskrishna/nodejs-fastapi-protobuf"
+Issues = "https://github.com/ysskrishna/nodejs-fastapi-protobuf/issues"
+Changelog = "https://github.com/ysskrishna/nodejs-fastapi-protobuf/blob/main/CHANGELOG.md"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"

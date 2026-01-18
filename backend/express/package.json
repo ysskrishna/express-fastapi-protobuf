@@ -1,12 +1,35 @@
 {
   "name": "quote-recommender-express",
   "version": "1.0.0",
-  "description": "Express BFF for quote recommender",
+  "description": "Express BFF for Quote Recommender — JSON BFF that talks to a protobuf FastAPI backend",
   "main": "src/index.js",
   "type": "module",
-  "scripts": {
-    "start": "node src/index.js"
+  "author": {
+    "name": "Y. Siva Sai Krishna",
+    "email": "sivasaikrishnassk@gmail.com",
+    "url": "https://github.com/ysskrishna"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ysskrishna/nodejs-fastapi-protobuf"
+  },
+  "homepage": "https://github.com/ysskrishna/nodejs-fastapi-protobuf#readme",
+  "bugs": {
+    "url": "https://github.com/ysskrishna/nodejs-fastapi-protobuf/issues"
+  },
+  "keywords": [
+    "express",
+    "bff",
+    "protobuf",
+    "quotes",
+    "recommender",
+    "api"
+  ],
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "license": "MIT",
   "dependencies": {
     "express": "^4.18.2",
     "protobufjs": "^7.2.5",

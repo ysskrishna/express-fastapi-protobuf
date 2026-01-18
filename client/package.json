@@ -1,12 +1,36 @@
 {
   "name": "quote-recommender-vue",
   "version": "1.0.0",
+  "description": "Vue 3 frontend for Quote Recommender — modern UI to browse and filter quotes",
   "type": "module",
+  "author": {
+    "name": "Y. Siva Sai Krishna",
+    "email": "sivasaikrishnassk@gmail.com",
+    "url": "https://github.com/ysskrishna"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ysskrishna/nodejs-fastapi-protobuf"
+  },
+  "homepage": "https://github.com/ysskrishna/nodejs-fastapi-protobuf#readme",
+  "bugs": {
+    "url": "https://github.com/ysskrishna/nodejs-fastapi-protobuf/issues"
+  },
+  "keywords": [
+    "vue",
+    "quotes",
+    "recommender",
+    "vite",
+    "frontend",
+    "ui"
+  ],
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test": "echo \"No tests specified\" && exit 0"
   },
+  "license": "MIT",
   "dependencies": {
     "vue": "^3.3.4",
     "axios": "^1.6.2"
