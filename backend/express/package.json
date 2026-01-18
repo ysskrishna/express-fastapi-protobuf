@@ -1,0 +1,17 @@
+{
+  "name": "quote-recommender-express",
+  "version": "1.0.0",
+  "description": "Express BFF for quote recommender",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "protobufjs": "^7.2.5",
+    "axios": "^1.6.2",
+    "express-validator": "^7.0.1",
+    "cors": "^2.8.6"
+  }
+}

@@ -18,7 +18,7 @@ setup:
 	@echo "$(YELLOW)Setting up FastAPI...$(NC)"
 	@cd backend/fastapi && uv sync --no-build
 	@echo "$(YELLOW)Setting up Node.js...$(NC)"
-	@cd backend/nodejs && npm install
+	@cd backend/express && npm install
 	@echo "$(YELLOW)Setting up Vue frontend...$(NC)"
 	@cd client && npm install
 	@echo "$(YELLOW)Generating protobuf code...$(NC)"
@@ -44,21 +44,21 @@ start:
 	@echo "$(YELLOW)Press Ctrl+C to stop all services$(NC)"
 	@trap 'kill 0' INT; \
 	cd backend/fastapi && uv run uvicorn main:app --reload --port 8000 & \
-	cd backend/nodejs && npm start & \
+	cd backend/express && npm start & \
 	cd client && npm run dev & \
 	wait
 
 stop:
 	@echo "$(YELLOW)Stopping services...$(NC)"
 	@pkill -f "uvicorn main:app" || true
-	@pkill -f "node index.js" || true
+	@pkill -f "node src/index.js" || true
 	@pkill -f "vite" || true
 	@echo "$(GREEN)Services stopped!$(NC)"
 
 clean:
 	@echo "$(YELLOW)Cleaning generated files...$(NC)"
 	@rm -rf backend/fastapi/proto
-	@rm -rf backend/nodejs/node_modules
+	@rm -rf backend/express/node_modules
 	@rm -rf client/node_modules
 	@rm -rf client/dist
 	@echo "$(GREEN)Clean complete!$(NC)"
