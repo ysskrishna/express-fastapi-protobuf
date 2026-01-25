@@ -8,7 +8,7 @@
 [![Node.js](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-> A production-ready Quote Recommender demonstrating microservice communication between Vue.js, Express, and FastAPI using Protocol Buffers for efficient binary serialization.
+> A reference architecture for a Quote Recommender demonstrating microservice communication between Vue.js, Express, and FastAPI using Protocol Buffers for efficient binary serialization.
 
 
 
@@ -141,10 +141,21 @@ express-fastapi-protobuf/
 
 ## Configuration
 
-**Environment Variables**:
-- **FastAPI**: `HOST`, `PORT` (8000), `QUOTES_FILE`.
-- **Express**: `PORT` (3000), `FASTAPI_URL`, `CORS_ORIGIN`.
-- **Vue**: `API_BASE_URL` (http://localhost:3000).
+### Configuration Files
+
+Each service is configured via a dedicated file. Modify these files to change ports or URLs.
+
+- **FastAPI**: `backend/fastapi/src/config.py`
+- **Express**: `backend/express/src/config.js`
+- **Vue**: `client/src/config.js`
+
+### Port Configuration
+
+| Service | Default Port | Configurable Via |
+|---------|--------------|------------------|
+| FastAPI | 8000 | `backend/fastapi/src/config.py` |
+| Express | 3000 | `backend/express/src/config.js` |
+| Vue/Vite | 5173 | `client/vite.config.js` |
 
 ## Makefile Commands
 
