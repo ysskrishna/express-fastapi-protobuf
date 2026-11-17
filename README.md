@@ -7,9 +7,9 @@
 [![Python](https://img.shields.io/badge/python-3.10+-blue.svg)](https://www.python.org/downloads/)
 [![Node.js](https://img.shields.io/badge/node.js-18+-green.svg)](https://nodejs.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Author site](https://img.shields.io/badge/author-ysskrishna.space-informational)](https://ysskrishna.space)
 
 > A reference architecture for a Quote Recommender demonstrating microservice communication between Vue.js, Express, and FastAPI using Protocol Buffers for efficient binary serialization.
-
 
 
 ## Overview
@@ -229,25 +229,32 @@ make proto
 make start
 ```
 
+## Built and maintained by
+
+Express + FastAPI + Protobuf is built and maintained by:
+
+| | Name | GitHub | Role |
+|---|------|--------|------|
+| <img src="https://github.com/ysskrishna.png?size=120" width="60" height="60" alt="Y. Siva Sai Krishna"> | **Y. Siva Sai Krishna** | [@ysskrishna](https://github.com/ysskrishna) | Creator |
+
 ## Support
 
-If you find this library helpful:
+If you find this project helpful:
 
 - ⭐ Star the repository
-- 🐛 Report issues
+- 🐛 [Report issues](https://github.com/ysskrishna/express-fastapi-protobuf/issues)
 - 🔀 Submit pull requests
 - 💝 [Sponsor on GitHub](https://github.com/sponsors/ysskrishna)
 
 ## License
 
-MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) - see [LICENSE](https://github.com/ysskrishna/express-fastapi-protobuf/blob/main/LICENSE) file for details.
+MIT © [Y. Siva Sai Krishna](https://github.com/ysskrishna) — see [LICENSE](LICENSE) for details.
 
 ---
 
 <p align="left">
   <a href="https://github.com/ysskrishna">Author's GitHub</a> •
   <a href="https://linkedin.com/in/ysskrishna">Author's LinkedIn</a> •
+  <a href="https://ysskrishna.space">Author's site</a> •
   <a href="https://github.com/ysskrishna/express-fastapi-protobuf/issues">Report Issues</a>
 </p>
-
-
